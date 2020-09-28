@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Tweeter/Tweeter.csproj", "Tweeter/"]
+COPY ["Tweeter.csproj", "Tweeter/"]
 RUN dotnet restore "Tweeter/Tweeter.csproj"
+WORKDIR "Tweeter/"
 COPY . .
-WORKDIR "/src/Tweeter"
 RUN dotnet build "Tweeter.csproj" -c Release -o /app/build
 
 FROM build AS publish
