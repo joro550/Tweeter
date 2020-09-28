@@ -16,6 +16,12 @@ on:
     - master
     paths:
     - 'src/**'
+    
+env:
+  HASH: $(git rev-parse --short "$GITHUB_SHA")
+  BRANCH: ${GITHUB_REF##*/}
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,38 +30,15 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
-    env:
-      HASH: $(git rev-parse --short "$GITHUB_SHA")
-      BRANCH: ${GITHUB_REF##*/}
-      SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-      PROJECT_ID: ${{ secrets.PROJECT_ID }}
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         
-       # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - name: Deploy to GCR
+        uses: RafikFarhad/push-to-gcr-github-action@v3
         with:
-          version: '290.0.1'
-          service_account_key: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
+          gcloud_service_key: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
+          registry: gcr.io
           project_id: ${{ secrets.PROJECT_ID }}
-        
-      # Build docker image
-      - name: Image
-        working-directory: ./src/Tweeter
-        run: |-
-          docker build --build-arg -t eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA .
-          
-      # Configure docker to use the gcloud command-line tool as a credential helper
-      - name: Configure
-        working-directory: ./src/Tweeter
-        run: |
-          gcloud auth configure-docker -q
-          
-      # Push image to Google Container Registry
-      - name: Build
-        working-directory: ./src/Tweeter
-        run: |-
-          docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
+          image_name: ${{ secrets.SERVICE_NAME }}
