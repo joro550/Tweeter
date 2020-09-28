@@ -42,7 +42,6 @@ jobs:
       - name: Deploy to GCR
         uses: RafikFarhad/push-to-gcr-github-action@v3
         with:
-          dockerfile: ./src/Tweeter/Dockerfile
           gcloud_service_key: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
           registry: gcr.io
           project_id: ${{ secrets.PROJECT_ID }}
