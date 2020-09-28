@@ -32,18 +32,18 @@ jobs:
         
       # Build docker image
       - name: Image
-        working-directory: ./src
+        working-directory: ./src/Tweeter
         run: |-
           docker build --build-arg -t eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA .
           
       # Configure docker to use the gcloud command-line tool as a credential helper
       - name: Configure
-        working-directory: ./src
+        working-directory: ./src/Tweeter
         run: |
           gcloud auth configure-docker -q
           
       # Push image to Google Container Registry
       - name: Build
-        working-directory: ./src
+        working-directory: ./src/Tweeter
         run: |-
           docker push eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA
