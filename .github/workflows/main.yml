@@ -34,11 +34,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
-      - name: Deploy to GCR
-        uses: RafikFarhad/push-to-gcr-github-action@v3
+      
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          gcloud_service_key: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
-          registry: gcr.io
-          project_id: ${{ secrets.PROJECT_ID }}
-          image_name: ${{ secrets.SERVICE_NAME }}
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+  
+      - id: Deploy
+        uses: GoogleCloudPlatform/github-actions/deploy-cloudrun@master
+        with:
+          image: gcr.io/${{ secrets.PROJECT_ID }}/hello
+          service: ${{ secrets.SERVICE_NAME }}
