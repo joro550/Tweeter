@@ -34,10 +34,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-  
-      - id: Deploy
-        uses: GoogleCloudPlatform/github-actions/deploy-cloudrun@master
+      
+      - id: deploy
+        uses: GoogleCloudPlatform/github-actions/deploy-appengine@master
         with:
-          credentials: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
-          image: gcr.io/${{ secrets.PROJECT_ID }}/hello
+          image: gcr.io/${{ secrets.PROJECT_ID }}/helloworld
           service: ${{ secrets.SERVICE_NAME }}
+          credentials: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
