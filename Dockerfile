@@ -1,8 +1,6 @@
 # Use Microsoft's official build .NET image.
 # https://hub.docker.com/_/microsoft-dotnet-core-sdk/
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
-EXPOSE 80
-EXPOSE 443
 WORKDIR /app
 
 # Install production dependencies.
