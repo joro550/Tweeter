@@ -31,7 +31,7 @@ jobs:
       - id: deploy
         uses: GoogleCloudPlatform/github-actions/deploy-cloudrun@master
         with:
-          image: gcr.io/${{ secrets.PROJECT_ID }}/helloworld
+          image: gcr.io/${{ secrets.PROJECT_ID }}/tweeter
           service: ${{ secrets.SERVICE_NAME }}
           credentials: ${{ secrets.GCR_DEVOPS_SERVICE_ACCOUNT_KEY }}
           region: europe-west4
