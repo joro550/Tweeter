@@ -22,5 +22,6 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
 
+
 # Run the web service on container startup.
 ENTRYPOINT ["dotnet", "Tweeter.dll"]
